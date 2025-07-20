@@ -1,83 +1,175 @@
-## Project Overview
-The airline industry operates in a dynamic market where airfares fluctuate based on real-time demand, seasonal trends, competitive pricing, fuel costs, and other factors. This project, "Airfare Prediction and Optimization with PySpark," aims to:
-  - Develop a predictive model to anticipate airfare fluctuations, helping travelers make informed booking decisions.
-  - Explore optimization strategies for airlines to maximize revenue by dynamically adjusting prices based on predicted demand.
-    
-Due to the large-scale nature of airfare data, we leverage Apache Spark and PySpark for data processing, feature engineering, and machine learning model training.
+✈️ Airfare Prediction and Optimization with PySpark
 
-## Project Goals
-### 1. Prediction Goals
-- Develop a high-accuracy predictive model for airfare prices.
-- Target RMSE within 10-15% of average fare and R² above 0.9.
+📘 Project Overview
 
-### 2. Inference & Analysis Goals
-- Feature Importance: Identify key factors driving airfare fluctuations (e.g., departure days, route, airline, cabin class).
-- Variable Relationships: Determine whether pricing follows a linear pattern or has optimal booking windows.
-- Seasonality & Temporal Effects: Quantify how holidays, weekdays, and peak travel times affect airfares.
+The airline industry is characterized by complex, fluctuating pricing mechanisms influenced by demand, seasonality, and market competition. This project leverages PySpark to develop a scalable solution for predicting airfares and exploring pricing optimization strategies.
 
-### 3. Optimization Exploration
-- Investigate demand-based pricing strategies where airlines can adjust fares dynamically.
+Using a large dataset of historical flight information, the project focuses on:
 
-## Dataset
-Using a large-scale flight dataset containing millions of itineraries with various flight details.
-#### Dataset Source: Kaggle - https://www.kaggle.com/datasets/dilwong/flightprices
+Accurately predicting airfare prices.
 
-- Key Features
-  - Temporal Data: searchDate, flightDate, elapsedDays, travelDuration
-  - Flight Details: originAirportCode, destinationAirportCode, airlineCode, totalTravelDistance, non-stop indicator
-  - Pricing Information: baseFare, totalFare
-  - Other Attributes: seatsRemaining, economy vs. refundable tickets, cabin class
+Extracting insights on influential variables.
 
-## Data Processing & Feature Engineering
-### 1. Data Cleaning
-- Handled missing values (e.g., segment-related features) using KNN imputation.
-- Removed outliers in travel duration and fare using IQR method.
+Exploring revenue optimization strategies for airlines based on predicted demand.
 
-### 2. Feature Engineering
-- Time-based Features:
-- Days until departure, day of the week, month of travel
+🎯 Objectives
 
-### Route-based Features:
-- Airport codes, route distance
+🔮 Prediction Goals
 
-### Pricing-based Features:
-- Fare difference, price per mile
+Build a regression model with:
 
-### Interaction Features:
-- Captured non-linear relationships (e.g., fare × days_until_departure)
+RMSE within 10–15% of average fare.
 
-### 3. Feature Selection
-- Correlation analysis to remove redundant features.
-- Feature importance ranking using tree-based models.
+R² > 0.9 for strong model fit.
 
-## Models & Evaluation  
-We trained multiple regression models using **PySpark MLlib**, comparing their performance using **RMSE (Root Mean Squared Error)** and **R² (R-squared)** metrics.  
+📊 Inference Goals
 
-| **Model**                 | **RMSE** | **R²**  |  
-|---------------------------|---------|--------|  
-| **GBTRegressor**          | **12.60**  | **0.99**  |  
-| **RandomForestRegressor** | 16.86  | 0.98  |  
-| **DecisionTreeRegressor** | 15.25  | 0.98  |  
-| **Linear Regression**     | 18.47  | 0.98  |  
+Analyze feature importance (e.g., day of week, distance, layovers).
 
-✅ **Gradient Boosting Trees (GBTRegressor)** performed best, capturing complex patterns in airfare pricing.  
+Identify non-linear relationships (e.g., days until departure vs. fare).
 
+Detect seasonality effects (e.g., holidays, weekends).
 
-## Final Findings & Insights
-### 1. Key Correlations
-- Fare increases with travel duration (correlation = 0.95).
-- Fare increases with total distance (correlation = 0.76).
-- Fare decreases as departure date nears (correlation = -0.48).
+💰 Optimization Goals
 
-### 2. Surprising Findings
-- Airfare patterns are non-linear:
-- Prices often decrease before departure but can spike last-minute.
+Simulate demand-based pricing using predictions.
 
-### 3. Layovers & Pricing:
-- Flights with one layover were sometimes more expensive than direct flights.
-- Airport-specific pricing:
-- The same airline & route had different fares based on departure airport.
+Propose strategies for dynamic fare adjustments to maximize revenue.
 
-### 4. Seasonality & Trends
-- Peak seasons (holidays, summer) drive higher fares.
-- Midweek flights tend to be cheaper but weekday differences are minimal.
+📦 Dataset
+
+Sourced from Kaggle, the dataset includes millions of flight itineraries and features such as:
+
+Temporal: searchDate, flightDate, elapsedDays
+
+Flight Info: originAirportCode, destinationAirportCode, segmentsAirlineCode
+
+Pricing: baseFare, totalFare
+
+Additional: seatsRemaining, cabinCode, isRefundable, isBasicEconomy
+
+🧪 Key Findings
+
+Non-Linearity of Pricing: Fare vs. days until departure did not follow a linear pattern. Sometimes prices decreased as the date approached, but often spiked just before departure.
+
+Layovers and Pricing: While more layovers generally meant lower fares, certain single-layover routes were more expensive than direct flights, likely due to route popularity.
+
+Seasonal Effects: Significant fare increases were observed around summer and holiday seasons.
+
+Airport and Airline Influence: Different airports and airlines showed varied pricing strategies even for similar routes.
+
+Weekday Trends: Flight demand peaks midweek, while weekend traffic drops. However, day-of-week had minimal impact on average fare.
+
+Strong Correlations:
+
+totalFare ↔ travelDuration (0.95)
+
+totalFare ↔ totalTravelDistance (0.76)
+
+days_until_departure ↔ fare_difference (−0.48)
+
+🧰 Exploratory Data Analysis (EDA)
+
+Skewed Distributions: totalFare and travelDuration showed strong right skew.
+
+Missing Values: Handled using KNN imputation.
+
+Outliers: Removed using IQR method.
+
+Segment Handling: Exploded multi-segment fields to extract meaningful features.
+
+🔧 Data Preprocessing
+
+Categorical Encoding: Used StringIndexer and OneHotEncoder
+
+Feature Engineering:
+
+days_until_departure, search_day_of_week, price_per_mile
+
+Interaction terms: fare * days_until_departure
+
+Feature Selection:
+
+Removed highly correlated variables
+
+Selected top features based on tree-based importance
+
+💡 Modeling Approach
+
+Models were trained using PySpark MLlib:
+
+Model
+
+RMSE
+
+R²
+
+GBTRegressor
+
+12.60
+
+0.99
+
+RandomForestRegressor
+
+16.86
+
+0.98
+
+DecisionTreeRegressor
+
+15.25
+
+0.98
+
+LinearRegression
+
+18.47
+
+0.98
+
+GBTRegressor was the most accurate due to its ability to capture non-linear patterns.
+
+⚠️ Challenges
+
+KNN Imputation was resource-intensive on large data.
+
+High-cardinality categorical variables required careful encoding.
+
+Multicollinearity required removal of redundant features.
+
+Segment explosion increased feature space and complexity.
+
+🤔 Insights and Future Work
+
+Use price elasticity estimation to dynamically optimize fares.
+
+Integrate real-time booking trends for live fare adjustments.
+
+Extend the model to include seat availability and customer behavior patterns.
+
+💪 Tech Stack
+
+Apache Spark / PySpark
+
+Python (Pandas, NumPy, Matplotlib, Seaborn)
+
+MLlib (PySpark’s ML Library)
+
+Jupyter Notebooks
+
+📚 Citations
+
+Kaggle Flight Prices Dataset
+
+Hastie, Tibshirani, Friedman — The Elements of Statistical Learning
+
+Apache Spark Documentation
+
+Matplotlib
+
+Pandas
+
+Scikit-learn
+
+Seaborn
