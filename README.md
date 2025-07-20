@@ -19,7 +19,7 @@ Due to the large-scale nature of airfare data, we leverage Apache Spark and PySp
 - Investigate demand-based pricing strategies where airlines can adjust fares dynamically.
 
 ## Dataset
-We used a large-scale flight dataset containing millions of itineraries with various flight details.
+Using a large-scale flight dataset containing millions of itineraries with various flight details.
 #### Dataset Source: Kaggle - https://www.kaggle.com/datasets/dilwong/flightprices
 
 - Key Features
